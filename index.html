@@ -378,12 +378,14 @@
         }
 
         // Prevent right-click // 
-       document.querySelector('.splash').onclick = function() {
+document.querySelector('.splash').onclick = function() {
     this.style.display = 'none';
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
     startHearts();
-}; 
+    startCounter();
+    document.querySelector('audio').play();
+};
     </script>
 </body>
 </html>
