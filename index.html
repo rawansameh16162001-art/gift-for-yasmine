@@ -36,7 +36,6 @@
             z-index: 1000;
             transition: all 0.8s ease-out;
             cursor: pointer;
-            pointer-events:none;
         }
 
         .splash.hidden {
@@ -374,9 +373,13 @@
             }, 200);
         }
 
-        // Prevent right-click & selection
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
+        // Prevent right-click // 
+       document.querySelector('.splash').onclick = function() {
+    this.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+    startHearts();
+}; 
     </script>
 </body>
 </html>
