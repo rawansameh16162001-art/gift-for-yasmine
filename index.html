@@ -256,7 +256,7 @@
     <!-- Splash Screen -->
     <div class="splash" onclick="showMain()">
         <h1>أهلاً بكِ يا ياسمين 💕</h1>
-        <div class="splash-btn">دوسي هنا للمفاجأة</div>
+        <div class="splash-btn" onclick="showMain()" style="cursor: pointer;">دوسي هنا للمفاجأة</div>
     </div>
 
     <!-- Main Page -->
@@ -317,19 +317,22 @@
 
     <script>
         // Show Main Page
-        function showMain() {
-            document.querySelector('.splash').classList.add('hidden');
-            setTimeout(() => {
-                document.getElementById('main').classList.add('show');
-                startCounter();
-                startHearts();
-                playMusic(); 
-               playMusic();
-        
-        // السطرين اللي هنضيفهم هنا
-        document.body.style.overflow = 'auto';
-        document.documentElement.style.overflow = 'auto';
-    , 800);}
+    function showMain() {
+    // 1. إخفاء شاشة الترحيب فوراً
+    document.querySelector('.splash').classList.add('hidden');
+
+    // 2. تشغيل السكرول عشان المسدج تظهر كاملة
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+
+    // 3. تشغيل باقي الحاجات (العداد، القلوب، الموسيقى)
+    setTimeout(() => {
+        document.getElementById('main').classList.add('show');
+        if (typeof startCounter === "function") startCounter();
+        if (typeof startHearts === "function") startHearts();
+        playMusic();
+    }, 800);
+}
 
         // Fixed Counter - Updates every SECOND
         function startCounter() {
@@ -397,6 +400,5 @@ document.addEventListener('click', function() {
     if(audio) audio.play();
 }, { once: true });
 </script>
-    </script>
 </body>
 </html>
