@@ -378,10 +378,8 @@
         }
 
         // Prevent right-click // 
-        // ده "المفتاح" اللي هيشغل الوظيفة اللي إنتِ تعبتِ فيها فوق
-document.body.onclick = function() {
-    showMain(); 
-};
+    // ده الكود الوحيد اللي هيشغل شاشة الترحيب ويفتح كل حاجة بلمسة واحدة
+document.querySelector('.splash').onclick = showMain;
     </script>
 </body>
 </html>
