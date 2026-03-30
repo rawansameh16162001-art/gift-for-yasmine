@@ -3,106 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مفاجأة لياسمين</title>
+    <title>مفاجأة ياسمين 💕</title>
     <style>
-        /* 1. السطر ده هو اللي هيخليكي تنزلي وتطلعي في الموبايل براحتك */
-        html, body { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: #ffdde1; font-family: sans-serif;
-            overflow-x: hidden; /* يمنع الهزة يمين وشمال */
-            overflow-y: auto;   /* يسمح بالنزول لتحت */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .splash { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #ee9ca7; z-index: 1000; display: flex; 
-            align-items: center; justify-content: center; color: white; cursor: pointer;
-        }
-        .splash.hidden { display: none; }
-
-        #main { 
-            display: none; padding: 20px; text-align: center; 
-            flex-direction: column; align-items: center; 
-        }
-        #main.show { display: flex; }
-
-        .counter { font-size: 2.5rem; color: #d63384; margin: 20px 0; }
-        
-        /* الصور التلاتة بأسماء ملفاتك */
-        .photo-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0; }
-        .photo { width: 100px; height: 100px; border: 4px solid white; border-radius: 10px; object-fit: cover; }
-
-        /* المسدج اللي كانت مش بتبان كاملة */
-        .message-box { 
-            background: white; color: #d63384; padding: 20px; 
-            border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            max-width: 90%; line-height: 1.6; font-size: 1.1rem;
-            margin-bottom: 50px; /* مسافة تحت عشان المسدج ما تلزقش في آخر الشاشة */
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            /* التعديل 1: غيرنا height لـ min-height وشيلنا القفل عشان الصفحة تنزل لتحت */
+            min-height: 100vh; 
+            background: #000;
         }
 
-        .heart { position: fixed; color: rgba(255, 77, 109, 0.7); font-size: 20px; pointer-events: none; animation: fall linear infinite; z-index: 1; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        /* Splash Screen */
+        .splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.8s ease-out;
+            cursor: pointer;
+        }
+
+        .splash.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        .splash h1 {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            color: white;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .splash-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .splash-btn:hover {
+            background: white;
+            color: #ff69b4;
+            transform: scale(1.05);
+        }
+
+        /* Main Page */
+        .main {
+            /* التعديل 2: خليناها relative بدل fixed عشان لما الصفحة تطول نعرف ننزل بالـ Scroll */
+            position: relative; 
+            width: 100%;
+            min-height: 100vh;
+            background: #000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            z-index: 1;
+        }
+
+        .main.show {
+            display: flex;
+        }
+
+        /* Counter - Top */
+        .counter {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 105, 180, 0.1);
+            padding: 15px 30px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        .counter-item {
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff69b4;
+            display: block;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: white;
+        }
+
+        /* Photos - Middle */
+        .photos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 90%;
+            margin-bottom: 40px;
+        }
+
+        .polaroid {
+            width: 180px;
+            height: 240px;
+            background: white;
+            position: relative;
+            transform-origin: bottom center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 8px solid white;
+            border-bottom: 30px solid white;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo1 { transform: rotate(-10deg); }
+        .photo2 { transform: rotate(0deg); z-index: 2; }
+        .photo3 { transform: rotate(10deg); }
+
+        /* Message - Bottom */
+        .message {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: center;
+            line-height: 1.7;
+            font-size: 1.2rem;
+            border: 3px solid rgba(255, 105, 180, 0.5);
+            margin-bottom: 50px;
+        }
+
+        .message h3 {
+            color: #ff69b4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Falling Hearts */
+        .heart {
+            position: fixed;
+            font-size: 24px;
+            color: #ff69b4;
+            pointer-events: none;
+            z-index: 10;
+            animation: fall 4s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .counter { flex-direction: row; gap: 10px; }
+            .polaroid { width: 130px; height: 170px; }
+            .message { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
-
-    <div class="splash" id="splash" onclick="showMain()">
-        <h1>دوسى هنا يا ياسمين 💖</h1>
+    <!-- Splash Screen -->
+    <div class="splash" onclick="showMain()">
+        <h1>أهلاً بكِ يا ياسمين 💕</h1>
+        <div class="splash-btn">دوسي هنا للمفاجأة</div>
     </div>
 
-    <div id="main">
-        <div class="counter" id="counter">00 : 00 : 00</div>
-        
-        <div class="photo-container">
-            <img src="pic1.jpg" class="photo" alt="1">
-            <img src="pic2.jpg" class="photo" alt="2">
-            <img src="pic3.jpg" class="photo" alt="3">
+    <!-- Main Page -->
+    <div class="main" id="main">
+        <iframe 
+            id="youtube-player" 
+            src="https://www.youtube.com/embed/eGBvb3OHKao?enablejsapi=1&autoplay=1&mute=0&loop=1&playlist=eGBvb3OHKao" 
+            frameborder="0" 
+            style="display:none;">
+        </iframe>
+
+        <!-- Counter (Top) -->
+        <div class="counter">
+            <div class="counter-item">
+                <span class="counter-number" id="days">00</span>
+                <span class="counter-label">أيام</span>
+            </div>
+            <div class="counter-item">
+                <span class="counter-number" id="hours">00</span>
+                <span class="counter-label">ساعات</span>
+            </div>
+            <div class="counter-item">
+                <span class="counter-number" id="minutes">00</span>
+                <span class="counter-label">دقائق</span>
+            </div>
         </div>
 
-        <div class="message-box">
-            ياسمين حبيبتي... كل سنة وأنتِ طيبة! 🎉 <br>
-            (هنا بقية كلامك اللي كان بيختفي في الموبايل.. دلوقتي هيبان كله وهتقدري تنزلي له)
+        <!-- Photos (Middle) -->
+        <div class="photos">
+            <div class="polaroid photo1"><img src="pic1.jpg" alt="1"></div>
+            <div class="polaroid photo2"><img src="pic2.jpg" alt="2"></div>
+            <div class="polaroid photo3"><img src="pic3.jpg" alt="3"></div>
+        </div>
+
+        <!-- Message (Bottom) -->
+        <div class="message">
+            <h3>صاحبة عمري.. ❤️</h3>
+            <p>بيقولو معرفة الناس كنوز، وأنتي كل كنوزي.</p>
+            <p>من يوم 10 / 10 / 2019 وكل يوم بيثبتلي إن وجودك في حياتي نعمة كبيرة.</p>
+            <p>بتمنى كل حياتي تكوني أنتي صحبتي وأختي.</p>
+            <p>يارب أشوفك أسعد واحدة في الدنيا، وكل حظوظ الدنيا تكون من نصيبك.</p>
+            <p style="font-weight: bold; font-size: 1.3rem; color: #ff69b4;">بحبك للأبد ❤️</p>
         </div>
     </div>
-
-    <audio id="myMusic" src="music.mp3" loop></audio>
 
     <script>
         function showMain() {
-            // 1. إخفاء الشاشة الأولى
-            document.getElementById('splash').classList.add('hidden');
-            
-            // 2. إظهار المحتوى
-            document.getElementById('main').classList.add('show');
-            
-            // 3. تشغيل الأغنية والعداد والقلوب
-            document.getElementById('myMusic').play();
-            startCounter();
-            createHearts();
+            document.querySelector('.splash').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('main').classList.add('show');
+                startCounter();
+                startHearts();
+                // تشغيل اليوتيوب
+                const player = document.getElementById('youtube-player');
+                player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            }, 800);
         }
 
-        // كود العداد الأصلي
         function startCounter() {
-            let s = 0;
-            setInterval(() => {
-                s++;
-                let h = Math.floor(s/3600);
-                let m = Math.floor((s%3600)/60);
-                let sec = s%60;
-                document.getElementById('counter').innerText = 
-                    `${h<10?'0'+h:h} : ${m<10?'0'+m:m} : ${sec<10?'0'+sec:sec}`;
-            }, 1000);
+            const startDate = new Date('2019-10-10T00:00:00').getTime();
+            function updateCounter() {
+                const now = new Date().getTime();
+                const diff = now - startDate;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            }
+            updateCounter();
+            setInterval(updateCounter, 1000);
         }
 
-        // كود القلوب اللي كانت بتنزل
-        function createHearts() {
+        function startHearts() {
             setInterval(() => {
                 const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.innerHTML = ['💖', '💕', '❤️'][Math.floor(Math.random() * 3)];
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '-10vh';
-                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
                 document.body.appendChild(heart);
                 setTimeout(() => heart.remove(), 5000);
             }, 300);
