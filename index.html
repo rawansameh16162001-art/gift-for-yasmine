@@ -12,10 +12,14 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
-            height: 100vh;
-        }
+    font-family: 'Arial', sans-serif;
+    overflow-y: auto !important; /* بيسمح بالنزول لتحت */
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: auto !important; /* بيلغي القفل اللي كان محدد الطول */
+    margin: 0;
+    padding-bottom: 50px; /* مساحة أمان تحت الرسالة */
+}
 
         /* Splash Screen */
         .splash {
@@ -152,7 +156,7 @@
         .polaroid img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain !important;
         }
 
         .polaroid::after {
