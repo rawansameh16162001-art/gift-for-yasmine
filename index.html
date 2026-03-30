@@ -14,9 +14,7 @@
         body {
             font-family: 'Arial', sans-serif;
             overflow-x: hidden;
-            /* التعديل 1: غيرنا height لـ min-height وشيلنا القفل عشان الصفحة تنزل لتحت */
-            min-height: 100vh; 
-            background: #000;
+            height: 100vh;
         }
 
         /* Splash Screen */
@@ -76,16 +74,17 @@
 
         /* Main Page */
         .main {
-            /* التعديل 2: خليناها relative بدل fixed عشان لما الصفحة تطول نعرف ننزل بالـ Scroll */
-            position: relative; 
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
             background: #000;
             display: none;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 40px 20px;
+            padding: 20px;
             z-index: 1;
         }
 
@@ -102,7 +101,6 @@
             border-radius: 25px;
             border: 2px solid rgba(255, 105, 180, 0.3);
             backdrop-filter: blur(10px);
-            margin-bottom: 40px;
         }
 
         .counter-item {
@@ -120,7 +118,6 @@
         .counter-label {
             font-size: 0.9rem;
             opacity: 0.8;
-            color: white;
         }
 
         /* Photos - Middle */
@@ -131,7 +128,6 @@
             gap: 40px;
             flex-wrap: wrap;
             max-width: 90%;
-            margin-bottom: 40px;
         }
 
         .polaroid {
@@ -140,12 +136,17 @@
             background: white;
             position: relative;
             transform-origin: bottom center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.5),
+                0 0 0 8px rgba(255,255,255,0.8),
+                0 0 0 16px rgba(0,0,0,0.2);
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s ease;
-            border: 8px solid white;
-            border-bottom: 30px solid white;
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05);
         }
 
         .polaroid img {
@@ -154,9 +155,21 @@
             object-fit: cover;
         }
 
-        .photo1 { transform: rotate(-10deg); }
+        .polaroid::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #ccc;
+            border-radius: 2px;
+        }
+
+        .photo1 { transform: rotate(-15deg) translateY(20px); }
         .photo2 { transform: rotate(0deg); z-index: 2; }
-        .photo3 { transform: rotate(10deg); }
+        .photo3 { transform: rotate(15deg) translateY(20px); }
 
         /* Message - Bottom */
         .message {
@@ -171,7 +184,6 @@
             line-height: 1.7;
             font-size: 1.2rem;
             border: 3px solid rgba(255, 105, 180, 0.5);
-            margin-bottom: 50px;
         }
 
         .message h3 {
@@ -191,14 +203,48 @@
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
+        /* YouTube Hidden Player */
+        #youtube-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .counter { flex-direction: row; gap: 10px; }
-            .polaroid { width: 130px; height: 170px; }
-            .message { font-size: 1rem; }
+            .counter {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 20px;
+            }
+            
+            .photos {
+                gap: 20px;
+            }
+            
+            .polaroid {
+                width: 140px;
+                height: 186px;
+            }
+            
+            .message {
+                font-size: 1rem;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -211,11 +257,13 @@
 
     <!-- Main Page -->
     <div class="main" id="main">
+        <!-- Hidden YouTube Player -->
         <iframe 
             id="youtube-player" 
-            src="https://www.youtube.com/embed/eGBvb3OHKao?enablejsapi=1&autoplay=1&mute=0&loop=1&playlist=eGBvb3OHKao" 
+            src="https://www.youtube.com/embed/eGBvb3OHKao?autoplay=1&mute=0&loop=1&playlist=eGBvb3OHKao&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1" 
             frameborder="0" 
-            style="display:none;">
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;z-index:-1;">
         </iframe>
 
         <!-- Counter (Top) -->
@@ -236,9 +284,18 @@
 
         <!-- Photos (Middle) -->
         <div class="photos">
-            <div class="polaroid photo1"><img src="pic1.jpg" alt="1"></div>
-            <div class="polaroid photo2"><img src="pic2.jpg" alt="2"></div>
-            <div class="polaroid photo3"><img src="pic3.jpg" alt="3"></div>
+            <div class="polaroid photo1">
+                <img src="pic1.jpg.jpg" alt="Photo 1" 
+                     onerror="this.parentNode.style.display='none'">
+            </div>
+            <div class="polaroid photo2">
+                <img src="pic2.jpg.jpg" alt="Photo 2" 
+                     onerror="this.parentNode.style.display='none'">
+            </div>
+            <div class="polaroid photo3">
+                <img src="pic3.jpg.jpg" alt="Photo 3" 
+                     onerror="this.parentNode.style.display='none'">
+            </div>
         </div>
 
         <!-- Message (Bottom) -->
@@ -248,50 +305,73 @@
             <p>من يوم 10 / 10 / 2019 وكل يوم بيثبتلي إن وجودك في حياتي نعمة كبيرة.</p>
             <p>بتمنى كل حياتي تكوني أنتي صحبتي وأختي.</p>
             <p>يارب أشوفك أسعد واحدة في الدنيا، وكل حظوظ الدنيا تكون من نصيبك.</p>
-            <p style="font-weight: bold; font-size: 1.3rem; color: #ff69b4;">بحبك للأبد ❤️</p>
+            <p style="font-weight: bold; font-size: 1.3rem; color: #ff69b4;">
+                بحبك للأبد ❤️
+            </p>
         </div>
     </div>
 
     <script>
+        // Show Main Page
         function showMain() {
             document.querySelector('.splash').classList.add('hidden');
             setTimeout(() => {
                 document.getElementById('main').classList.add('show');
                 startCounter();
                 startHearts();
-                // تشغيل اليوتيوب
-                const player = document.getElementById('youtube-player');
-                player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                playMusic();
             }, 800);
         }
 
+        // Fixed Counter - Updates every SECOND
         function startCounter() {
             const startDate = new Date('2019-10-10T00:00:00').getTime();
+            
             function updateCounter() {
                 const now = new Date().getTime();
                 const diff = now - startDate;
+                
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
                 document.getElementById('days').textContent = days;
                 document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
                 document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             }
+            
             updateCounter();
-            setInterval(updateCounter, 1000);
+            setInterval(updateCounter, 1000); // Every SECOND
         }
 
+        // Play Music Function
+        function playMusic() {
+            const player = document.getElementById('youtube-player');
+            player.src = player.src; // Reload to trigger autoplay
+            player.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }
+
+        // Falling Hearts
         function startHearts() {
             setInterval(() => {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
                 heart.innerHTML = ['💖', '💕', '❤️'][Math.floor(Math.random() * 3)];
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
                 document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 5000);
-            }, 300);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 6000);
+            }, 200);
         }
+
+        // Prevent right-click & selection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
     </script>
 </body>
 </html>
